@@ -134,21 +134,23 @@ Offers.sync = () => {
       const buyWhichToken = Dapple.getTokenByAddress(trade.args.buy_which_token);
       const sellWhichToken = Dapple.getTokenByAddress(trade.args.sell_which_token);
 
-      // Transform arguments
-      const args = {
-        buyWhichToken_address: trade.args.buy_which_token,
-        buyWhichToken,
-        sellWhichToken_address: trade.args.sell_which_token,
-        sellWhichToken,
-        buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
-        sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
-      };
-      // Get block for timestamp
-      web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
-        if (!error) {
-          Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
-        }
-      });
+      if (buyWhichToken && sellWhichToken) {
+        // Transform arguments
+        const args = {
+          buyWhichToken_address: trade.args.buy_which_token,
+          buyWhichToken,
+          sellWhichToken_address: trade.args.sell_which_token,
+          sellWhichToken,
+          buyHowMuch: convertTo18Precision(trade.args.buy_how_much.toString(10), buyWhichToken),
+          sellHowMuch: convertTo18Precision(trade.args.sell_how_much.toString(10), sellWhichToken),
+        };
+        // Get block for timestamp
+        web3.eth.getBlock(trade.blockNumber, (blockError, block) => {
+          if (!error) {
+            Trades.upsert(trade.transactionHash, _.extend(block, trade, args));
+          }
+        });
+      }
     }
   });
 };
@@ -187,30 +189,32 @@ Offers.updateOffer = (idx, sellHowMuch, sellWhichTokenAddress, buyHowMuch, buyWh
   const sellToken = Dapple.getTokenByAddress(sellWhichTokenAddress);
   const buyToken = Dapple.getTokenByAddress(buyWhichTokenAddress);
 
-  let sellHowMuchValue = convertTo18Precision(sellHowMuch, sellToken);
-  let buyHowMuchValue = convertTo18Precision(buyHowMuch, buyToken);
-  if (!(sellHowMuchValue instanceof BigNumber)) {
-    sellHowMuchValue = new BigNumber(sellHowMuchValue);
-  }
-  if (!(buyHowMuchValue instanceof BigNumber)) {
-    buyHowMuchValue = new BigNumber(buyHowMuchValue);
-  }
+  if (sellToken && buyToken) {
+    let sellHowMuchValue = convertTo18Precision(sellHowMuch, sellToken);
+    let buyHowMuchValue = convertTo18Precision(buyHowMuch, buyToken);
+    if (!(sellHowMuchValue instanceof BigNumber)) {
+      sellHowMuchValue = new BigNumber(sellHowMuchValue);
+    }
+    if (!(buyHowMuchValue instanceof BigNumber)) {
+      buyHowMuchValue = new BigNumber(buyHowMuchValue);
+    }
 
-  const offer = {
-    owner,
-    status,
-    helper: status === Status.PENDING ? 'Your new order is being placed...' : '',
-    buyWhichTokenAddress,
-    buyWhichToken: buyToken,
-    sellWhichTokenAddress,
-    sellWhichToken: sellToken,
-    buyHowMuch: buyHowMuchValue.toString(10),
-    sellHowMuch: sellHowMuchValue.toString(10),
-    ask_price: buyHowMuchValue.div(sellHowMuchValue).toNumber(),
-    bid_price: sellHowMuchValue.div(buyHowMuchValue).toNumber(),
-  };
+    const offer = {
+      owner,
+      status,
+      helper: status === Status.PENDING ? 'Your new order is being placed...' : '',
+      buyWhichTokenAddress,
+      buyWhichToken: buyToken,
+      sellWhichTokenAddress,
+      sellWhichToken: sellToken,
+      buyHowMuch: buyHowMuchValue.toString(10),
+      sellHowMuch: sellHowMuchValue.toString(10),
+      ask_price: buyHowMuchValue.div(sellHowMuchValue).toNumber(),
+      bid_price: sellHowMuchValue.div(buyHowMuchValue).toNumber(),
+    };
 
-  Offers.upsert(idx, { $set: offer });
+    Offers.upsert(idx, { $set: offer });
+  }
 };
 
 Offers.newOffer = (sellHowMuch, sellWhichToken, buyHowMuch, buyWhichToken, callback) => {
