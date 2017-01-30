@@ -22,19 +22,6 @@ Template.gnttokens.viewmodel({
   },
   amount: '',
   lastError: '',
-  fillAmount() {
-    let amount = '0';
-    try {
-      if (this.type() === DEPOSIT) {
-        amount = web3.fromWei(Session.get('GNTBalance'));
-      } else if (this.type() === WITHDRAW) {
-        amount = web3.fromWei(Tokens.findOne('W-GNT').balance);
-      }
-    } catch (e) {
-      amount = '0';
-    }
-    this.amount(amount);
-  },
   broker() {
     return Session.get('GNTBroker');
   },

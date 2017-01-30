@@ -1,13 +1,11 @@
 <template name="lasttrades">
-  <div class="order-section-content market-history">
+  <div class="order-section-content">
     <h2>
       MARKET HISTORY
     </h2>
+
     <div>
-      {{#if loadingTradeHistory}}
-        <div class="loading-market-history">{{{loadingIcon}}} Loading history...</div>
-      {{/if}}
-      {{> orders orders=lastTrades type='lastTrades' priceLabel='PRICE' showCancel=true showType=true showDate=true canOpenTxLink=true}}
+      {{> orders orders=lastTrades type='lastTrades' priceLabel='PRICE' showCancel=true showType=true showDate=true}}
     </div>
   </div>
 </template>

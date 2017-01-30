@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { Session } from 'meteor/session';
 import { Dapple, web3 } from 'meteor/makerotc:dapple';
-import { convertTo18Precision } from '/imports/utils/conversion';
+import { _ } from 'meteor/underscore';
 
 class TokenEventCollection extends Mongo.Collection {
   fromLabel() {
@@ -26,17 +26,17 @@ class TokenEventCollection extends Mongo.Collection {
       case 'transfer':
         row.from = event.args.from;
         row.to = event.args.to;
-        row.amount = convertTo18Precision(event.args.value, Dapple.getTokenByAddress(event.address));
+        row.amount = event.args.value;
         break;
       case 'deposit':
         row.from = event.args.who;
         row.to = event.address;
-        row.amount = convertTo18Precision(event.args.amount, Dapple.getTokenByAddress(event.address));
+        row.amount = event.args.amount;
         break;
       case 'withdrawal':
         row.from = event.address;
         row.to = event.args.who;
-        row.amount = convertTo18Precision(event.args.amount, Dapple.getTokenByAddress(event.address));
+        row.amount = event.args.amount;
         break;
       default:
         break;
@@ -70,7 +70,7 @@ class TokenEventCollection extends Mongo.Collection {
   watchTokenEvents() {
     if (Session.get('startBlock') !== 0) {
       // console.log('filtering token events from ', Session.get('startBlock'));
-      const ALL_TOKENS = Dapple.getTokens();
+      const ALL_TOKENS = _.uniq([Session.get('quoteCurrency'), Session.get('baseCurrency')]);
       ALL_TOKENS.forEach((tokenId) => {
         Dapple.getToken(tokenId, (error, token) => {
           if (!error) {

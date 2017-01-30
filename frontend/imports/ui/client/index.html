@@ -1,23 +1,23 @@
 <body>
   <div class="container">
-    {{#if and isConnected hasAccount}}
+    {{#if isConnected}}
       <div class="row row-header">
-        <section class="col-xs-6">
+        <section class="col-md-4">
           {{> networkStatus }}
         </section>
-        <section class="col-xs-0">
+        <section class="col-md-2">
           {{> volumes }}
         </section>        
-        <section class="col-xs-6">        
+        <section class="col-md-6">        
           {{> accountSelector }}
         </section>        
       </div>
-      <div class="row row-header row-messages">
+      <div class="row row-header">
         {{> messages}}
       </div>
       {{#if ready}}
         {{#if contractExists}}
-          <div class="row row-tabs">
+          <div class="row">
             {{> tabs }}        
           </div>
           <div class="tab-content">
@@ -27,13 +27,9 @@
           </div>
         {{/if}}
       {{/if}}
-    {{/if}}
+    {{/if}}  
     {{#unless isConnected}}
       {{> noEthereum}}
-    {{else}}
-      {{#unless hasAccount}}
-        {{> noAccount}}
-      {{/unless}}
     {{/unless}}
   </div>
   {{> footer}}

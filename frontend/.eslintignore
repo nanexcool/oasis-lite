@@ -4,4 +4,3 @@ packages/dapple/package-post-init.js
 packages/dapple/maker.js
 packages/dapple/build/maker-otc.js
 packages/dapple/build/token-wrapper.js
-imports/utils/Chart.min.js

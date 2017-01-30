@@ -8,24 +8,22 @@
       <table>
         <tbody>
           {{#if equals type 'deposit'}}
-          <tr class="row-data-line">
+          <tr class="row-input-line">
             <th>
-              WALLET
+              GNT
             </th>
             <td class="token">
-              <span class="fill-amount" {{b "click: fillAmount"}}>{{formatBalance GNTBalance}}</span>
-              <span class="span-buy-sell-currency">GNT</span>                
+              {{formatBalance GNTBalance}}
             </td>
           </tr>
           {{else}}
-          <tr class="row-data-line">
+          <tr class="row-input-line">
             <th>
-              DEPOSITED
+              W-GNT
             </th>
             <td class="token">
               {{#let token=(findToken 'W-GNT')}}
-                <span class="fill-amount" {{b "click: fillAmount"}}>{{formatBalance token.balance}}</span>
-                <span class="span-buy-sell-currency">W-GNT</span>              
+                {{formatBalance token.balance}}
               {{/let}}
             </td>
           </tr>
@@ -35,11 +33,7 @@
               AMOUNT
             </th>
             <td>
-              {{#if equals type 'deposit'}}
-                <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">GNT</span> 
-              {{else}}
-                <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}> <span class="span-deposit-withdraw-currency">W-GNT</span> 
-              {{/if}}
+              <input type="number" class="input amount" step="any" min="0" {{b "value: amount, attr: { max: maxAmount }"}}>
             </td>
           </tr>
         </tbody>
