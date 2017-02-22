@@ -1018,14 +1018,14 @@ a.logo {
   display: block;
   width: 155px;
   height: 33px;
-  background: url(logo-oasis-lite.png);
+  background: url(logo-oasis-lite.svg);
   background-size: 150px 31px;
   background-repeat: no-repeat;
 
 }
 
 a.logo:hover {
-  background-image: url(logo-oasis-lite-hover.png);
+  background-image: url(logo-oasis-lite-hover.svg);
 }
 
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
